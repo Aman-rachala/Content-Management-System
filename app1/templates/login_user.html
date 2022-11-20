@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}User Login{% endblock title %}
+{% block style %}
+<style>   
+    Body {  
+      font-family: Calibri, Helvetica, sans-serif;  
+      background-color: rgb(27, 18, 18);  
+    }  
+    button {   
+           background-color: rgb(27, 18, 18);   
+           width: 100%;  
+            color: rgb(242, 140, 40);   
+            padding: 15px;   
+            margin: 10px 0px;   
+            border: none;   
+            cursor: pointer;   
+             }   
+     form {   
+            {% comment %} border: 3px solid #f1f1f1;   {% endcomment %}
+            color: rgb(242, 140, 40);  
+            border-radius:20px;
+        }   
+     input[type=text], input[type=password] {   
+            width: 100%;   
+            margin: 8px 0;  
+            padding: 12px 20px;   
+            display: inline-block;   
+            border: 2px solid green;   
+            box-sizing: border-box;   
+        }  
+     button:hover {   
+            opacity: 0.7;   
+        }   
+      .cancelbtn {   
+            width: auto;   
+            padding: 10px 18px;  
+            margin: 10px 5px;  
+        }   
+            
+         
+     .container {   
+    
+            width: 50%;
+            padding: 25px;   
+            background-color: rgb(242, 140, 40);  
+            color: rgb(0,0,0); 
+            border-radius:20px;
+        }   
+    h1{
+        color:white;
+        padding-top:5%;
+    }
+    /* The alert message box */
+.alert {
+  padding: 20px;
+  background-color: #FF5C5C; /* Red */
+  color: white;
+  margin-bottom: 15px;
+}
+
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+  color: black;
+}
+    </style>
+{% endblock style %}
+   
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}">Blog</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent px-5">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'adminlogin' %}">Admin Login</a>
+          </li>
+                       
+      </div>
+    </div>
+  </nav>
+  {% for i in messages %}
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        {{ i }}
+    </div>
+    {% endfor %}
+<center> <h1> Customer Login Form </h1> </center>   
+    <form method = 'POST'>
+      {% csrf_token %}
+        <center>
+            <div class="container">   
+                <label>Username : </label>   
+                <input type="text" placeholder="Enter Username" name="username" required>  
+                <label>Password : </label>   
+                <input type="password" placeholder="Enter Password" name="password" required>  
+                <button type="submit">Login</button>                   
+            </div>
+        </center> 
+           
+    </form>
+{% endblock body %}   
