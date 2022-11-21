@@ -4,6 +4,10 @@ from django.contrib.auth import login as auth_login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
+from .models import Post
+from hitcount.views import HitCountDetailView
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 def index(request):
     return render(request,"index.html")
@@ -65,7 +69,26 @@ def dashboard(request,user = None):
 @login_required
 def blogs(request):
     user = request.user
-    return render(request,'blogs.html',{"user":user})
+    posts = Post.objects.all()
+    return render(request,'blogs.html',{"user":user,'posts':posts})
+
+# @login_required
+# def blog(request,pid):
+#     post = Post.objects.filter(pid = pid)
+#     post = post[0]
+#     # print(post)
+
+#     return render(request,'blog.html',{"i":post})
+# @login_required
+class blog(HitCountDetailView,LoginRequiredMixin,View): 
+    model = Post  
+    template =  'blog.html'
+    count_hit = True
+
+    def get(self,request,pid):
+        post = self.model.objects.filter(pid = pid)
+        post = post[0]
+        return render(request,self.template,{"i":post})
 
 @login_required
 def userlogout(request):

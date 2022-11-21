@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{i.title}}
+{% endblock title %}
+{% block style %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .comment-box{
+        width: 100%;
+        border: 1px solid #ccc;
+        margin : 0 0;
+        padding : 10px 20px;
+        {% comment %} font-family : '' {% endcomment %}
+        border-radius: 10px;
+        margin-left: 0%;
+        margin-top : 80px;
+        box-shadow : 0px 0px 10 px 1px rgb(165,165,165);
+
+    }
+
+    .comment-box p{
+        text-align: left;
+        font-size : 28px;
+        color : #777;
+    }
+
+    .comment-form input,.comment-form textarea{
+        width : 100%;
+        padding : 10px;
+        margin : 5px 0;
+        box-sizing : border-box;
+        outline : none;
+        font-size : 18px;
+        {% comment %} font-family :  {% endcomment %}
+        border : 1px solid #ddd;
+        color : #777;
+    }
+
+    .comment-form button{
+        margin : 10px 0;
+        border : none;
+        background-color : #d0d0d0;
+        padding : 10px;
+        font-size: 18px;
+        border-radius : 3px;
+        color : #444;
+    }
+    button:hover{
+        color : white;
+        background-color : #444;
+    }
+    
+    .dialogbox .body {
+        position: relative;
+        max-width: 100%;
+        height: auto;
+        margin: 20px 10px;
+        padding: 5px;
+        background-color: #DADADA;
+        border-radius: 3px;
+        border: 5px solid #ccc;
+      }
+      
+      .body .message {
+        min-height: 30px;
+        border-radius: 3px;
+        font-family: Arial;
+        font-size: 18px;
+        line-height: 1.5;
+        color: #797979;
+        padding : 2px;
+      }
+      {% comment %} .tip {
+        width: 0px;
+        height: 0px;
+        position: relative;
+        background: transparent;
+        border: 10px solid #ccc;
+      } {% endcomment %}
+</style>
+{% endblock style %}
+{% block body %}
+{% load hitcount_tags %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}">Blog</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent px-5">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'adminlogin' %}">Add Blog</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>              
+      </div>
+    </div>
+  </nav>
+<div class="container">
+    <h1>{{i.title}}</h1>
+    <h2>{{ i.date }} | {% get_hit_count for i %} <i class="fa fa-eye"></i></h2>
+    <p>{{ i.text|safe }}</p>        
+</div>
+<div class="container">
+    <div class="comment-box">
+        <p>Leave a Comment</p>
+        <form class="comment-form">
+            <textarea name="comment" id="comment" rows="5" placeholder = "Write your Comment"></textarea>
+            <button type = "submit">Post Comment</button>
+        </form>
+    </div>
+    {% comment %} <div class="row container border my-3"> {% endcomment %}
+        {% comment %} <img src="https://freesvg.org/img/abstract-user-flat-3.png" class="avatar avatar-sm mr-4"> {% endcomment %}
+        {% comment %} <img src="https://freesvg.org/img/abstract-user-flat-3.png" class="pt-3 rounded-circle" style="width: 100px;"
+  alt="Avatar" />
+        <div class="dialogbox">
+            <div class="body">
+              <span class="tip tip-down"></span>
+              <div class="message">
+                <span>I just made a comment about this comment box which is purely made from CSS.</span>
+              </div>
+            </div>
+          </div>
+    </div>   {% endcomment %}
+    <div class="d-flex flex-row border my-3">
+        <div class="p-2">
+            <img src="https://freesvg.org/img/abstract-user-flat-3.png" class="pt-3 rounded-circle" style="width: 80px;"
+  alt="Avatar" />
+        </div>
+        <div class="p-2">
+            <div class="dialogbox pt-3">
+                <div class="body">
+                  <span class="tip tip-down"></span>
+                  <div class="message">
+                    <span>I just made a comment about this comment box which is purely made from CSS.</span>
+                  </div>
+                </div>
+              </div>
+        </div>
+        {% comment %} <div class="p-2">Flex item 3</div> {% endcomment %}
+      </div>  
+        
+</div>
+
+{% endblock body %}
