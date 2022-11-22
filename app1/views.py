@@ -1,13 +1,22 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_list_or_404
 from django.contrib.auth import logout,authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
-from .models import Post
+from .models import Post,Comment
 from hitcount.views import HitCountDetailView
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.views.generic import CreateView,UpdateView
+from .forms import PostForm
+from django.http import HttpResponseRedirect
+from django.urls import reverse,reverse_lazy
+from django.contrib.auth.decorators import user_passes_test
+
+class SuperUserCheck(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser
 # Create your views here.
 def index(request):
     return render(request,"index.html")
@@ -81,14 +90,90 @@ def blogs(request):
 #     return render(request,'blog.html',{"i":post})
 # @login_required
 class blog(HitCountDetailView,LoginRequiredMixin,View): 
-    model = Post  
+    model1 = Post  
+    model2 = Comment
     template =  'blog.html'
     count_hit = True
 
     def get(self,request,pid):
-        post = self.model.objects.filter(pid = pid)
+        post = self.model1.objects.filter(pid = pid)
         post = post[0]
-        return render(request,self.template,{"i":post})
+        comments = self.model2.objects.filter(post = post)
+        # print(comments)
+        # print(comments)
+        counts = comments.count()
+        # print(counts)
+        return render(request,self.template,{"i":post,'comments':comments,'count':counts})
+    
+    def post(self,request,pid):
+        post = self.model1.objects.filter(pid = pid)
+        post = post[0]
+        user = request.user
+        text = request.POST.get("comment")
+        post_ins = post
+        ins = Comment(user=user,text=text,post=post_ins)
+        ins.save()        
+        comments = self.model2.objects.filter(post = post)
+        # print(comments)
+        counts = comments.count()
+        return render(request,self.template,{"i":post,'comments':comments,"count":counts})
+         
+# def addblog(request):
+#     return render(request,"addblog.html")
+
+class addblog(SuperUserCheck,CreateView):
+    model = Post
+    template = "addblog.html"
+    fields = "__all__"    
+
+    def get(self,request):
+        # form = self.form()
+        form = PostForm()
+        return render(request,self.template,{"form":form})
+    
+    def post(self,request):
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()    
+        return redirect("adminblogs")
+        
+# class editblog(UpdateView):
+#     def get(self,request,pid):
+#         post = Post.objects.filter(pid = pid)
+#         post = post[0]
+#         form = PostForm(request.GET,instance=post)
+#         return render(request,'editblog.html',{'form':form})
+@user_passes_test(lambda u: u.is_superuser)
+def editblog(request,pid):
+    if request.method != 'POST':
+        post = Post.objects.filter(pid = pid)
+        post = post[0]
+        form = PostForm(instance=post)
+        return render(request,'editblog.html',{'form':form})
+    else:
+        post = Post.objects.filter(pid = pid)
+        post = post[0]
+        form = PostForm(request.POST,instance=post)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('blog',args = [str(pid)]))
+
+class deleteblog(SuperUserCheck,View):
+    def get(self,request,pid):
+        post = Post.objects.filter(pid = pid)
+        post = post[0]
+        post.delete()
+        return redirect('adminblogs')
+
+
+def likes(request,pid):
+    post = Post.objects.filter(pid = pid)
+    post = post[0]
+    post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('blog',args=[str(pid)]))
+    # return render(request,"addblog.html")
+
+
 
 @login_required
 def userlogout(request):
