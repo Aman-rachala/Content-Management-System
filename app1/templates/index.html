@@ -1,27 +1,40 @@
 {% extends 'base.html' %}
 
 {% block title %}Home{% endblock title %}
-  {% block body %}
+{% block style %}
+<style>
+  Body{
+    background : rgba(0,0,0,0.3)url("https://images.unsplash.com/photo-1432821596592-e2c18b78144f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZyUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80");
+    background-attachment : fixed;
+    background-position: center;
+    background-size : cover;
+    {% comment %} background-repeat : no-repeat; {% endcomment %}
+    height : 100%;
+    margin : 0;
+    padding : 0;
+    background-blend-mode:darken;
+  }
+  .heading{
+    color : white;
+    font-size : 200px;
+  }
+  .text{
+    color : white;
+    font-size : 45px;
+  }
+</style>
+{% endblock style %}
+{% block body %}
+<div class = "background-image ">
+  <div class="heading pt-5">
+    <center>MY BLOG</center>
+  </div>
+  <div class="text">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Blog</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent px-5">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'adminlogin' %}">Admin Login</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'userlogin' %}">Customer Login</a>
-              </li>  
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'usersignup' %}">Customer Signup</a>
-              </li>            
-          </div>
-        </div>
-      </nav>
-  {% endblock body %}
-</html>
+    <p><center>
+      Welcome to my blog website. I often write about coding, travelling and food. Hope you enjoy your time on this website and learn new things.
+    </center></p>
+  </div>
+</div>
+  
+{% endblock body %}

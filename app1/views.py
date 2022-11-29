@@ -13,6 +13,7 @@ from .forms import PostForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse,reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
+from django.core.files.storage import FileSystemStorage
 
 class SuperUserCheck(UserPassesTestMixin, View):
     def test_func(self):
@@ -34,7 +35,7 @@ def usersignup(request):
                 user = User.objects.create_user(username = username,password = password)
                 user.save()
                 auth_login(request,user)
-                return redirect("blogs")
+                return redirect("userblogs")
         else:
             messages.info(request,"The passwords entered are not same!")
             return redirect("usersignup") 
@@ -60,7 +61,7 @@ def userlogin(request):
         # print(user)      
         if user is not None:
             auth_login(request,user)
-            return redirect("dashboard")
+            return redirect("userblogs")
         else:
             messages.info(request,"Customer User credentails are incorrect!")
             return redirect("userlogin")    
@@ -75,11 +76,18 @@ def temp_dashboard(request):
 def dashboard(request,user = None):    
     return render(request,"dashboard.html")
     
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def blogs(request):
     user = request.user
     posts = Post.objects.all()
     return render(request,'blogs.html',{"user":user,'posts':posts})
+
+@login_required
+def userblogs(request):
+    user = request.user
+    posts = Post.objects.all()
+    return render(request,'blogs.html',{"user":user,'posts':posts})
+
 
 # @login_required
 # def blog(request,pid):
@@ -102,6 +110,8 @@ class blog(HitCountDetailView,LoginRequiredMixin,View):
         # print(comments)
         # print(comments)
         counts = comments.count()
+        # likes = self.model1.likescount(post)
+        # print(likes)
         # print(counts)
         return render(request,self.template,{"i":post,'comments':comments,'count':counts})
     
@@ -120,7 +130,7 @@ class blog(HitCountDetailView,LoginRequiredMixin,View):
          
 # def addblog(request):
 #     return render(request,"addblog.html")
-
+# name = ''
 class addblog(SuperUserCheck,CreateView):
     model = Post
     template = "addblog.html"
@@ -128,13 +138,27 @@ class addblog(SuperUserCheck,CreateView):
 
     def get(self,request):
         # form = self.form()
+        
         form = PostForm()
         return render(request,self.template,{"form":form})
     
     def post(self,request):
         form = PostForm(request.POST)
+        # print(form)
         if form.is_valid():
-            form.save()    
+            # print("hi")
+            # print(form)
+            # global name
+            # name=''
+            # docu = request.FILES['thumbnail']
+            # fs = FileSystemStorage()
+            # file = fs.save(docu.name, docu)
+            p = form.save() 
+            # f = request.FILES["id_thumbnail"]
+            # print(request.POST.get("id_thumbnail"))
+            # print(request.POST.get("title"))
+        else:
+            print(form.errors.as_data())    
         return redirect("adminblogs")
         
 # class editblog(UpdateView):

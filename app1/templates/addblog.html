@@ -4,30 +4,56 @@
 {% comment %} <script type = "text/javascript" src = "ckeditor/ckeditor.js"></script> {% endcomment %}
 {% endblock style %}
 {% block body %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
+{% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'index' %}">Blog</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent px-5">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           {% if user.is_superuser %}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'addblog' %}">Add Blog</a>
         </li>
         {% endif %}
-        <li class="nav-item">
+        <li class="px-0 nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>              
     </div>
   </div>
-</nav>
-<form method = "POST">
-  {% csrf_token %}
-  {{ form.media }}
-  {{ form.as_p }}
-  <button type = "submit">SUBMIT</button>
-</form>
+</nav> {% endcomment %}
+
+<div class="container">
+  <center><h1 class = "py-4">Add BLOG</h1></center>
+  <form method = "POST">
+    {% load crispy_forms_tags %}
+    {% csrf_token %}
+    {{ form.media }}
+    {% comment %} {{form|crispy}} {% endcomment %}
+    <div class="form-group py-3">
+      <strong><label for="exampleInputEmail1" class = "py-2" style = "padding-right: 0.5rem!important;">Title:</label></strong>
+      {{ form.title }}
+    </div>
+    <div class="form-group py-3">
+      <strong><label for="exampleFormControlTextarea1" class = "py-2">Write Your Blog Here:</label></strong><br>
+      {{ form.text }}
+    </div>
+    <div class="form-group py-3">
+      <strong><label for="exampleFormControlFile1" class = "py-2">Select Thumbnail For Your Blog:</label></strong><br>
+      {{ form.thumbnail }}
+    </div> 
+    {% comment %} {{ form.as_p }} {% endcomment %}
+    <center><button type = "submit" class = "btn btn-success">SUBMIT</button></center>
+  </form>
+  <script>
+    $('#inputGroupFile02').on('change',function(){
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    })
+</script>
+</div>
 
 {% endblock body %}

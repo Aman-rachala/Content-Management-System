@@ -10,14 +10,20 @@ class IpModel(models.Model):
 class Post(models.Model):
     pid = models.AutoField(primary_key=True)
     title = models.CharField(max_length=50)
-    text = RichTextField(max_length=10000)
-    thumbnail = models.ImageField(upload_to="",null=True,blank=True)
-    thumbnail_url = models.CharField(max_length=500,default=None,null=True,blank=True)
-    likes = models.ManyToManyField(User,related_name='blog_post')
+    text = RichTextField(max_length=100000)
+    thumbnail = models.ImageField(upload_to="media",blank = True,null=True)    
+    likes = models.ManyToManyField(User,related_name='blog_post',blank=True)
     date = models.DateField(auto_now_add=True)
+    
 
     def __str__(self):
         return self.title
+
+    # def likescount(self):
+    #     count = 0
+    #     for i in self.User.all():
+    #         count += 1
+    #     return count
 
 class Comment(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)

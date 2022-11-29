@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Blogs page{% endblock title %}
 {% block style %}
+
 <style>
   .background-image{
-    background : rgba(0,0,0,0.3)url("https://images.unsplash.com/photo-1556139930-c23fa4a4f934?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80");
+    background : rgba(0,0,0,0.3)url("https://s3.envato.com/files/212542380/Dark%20Background%20%20%20%2001_preview1%20.JPG");
+    background-attachment : fixed;
+    background-position: center;
     background-size : cover;
-    background-repeat : no-repeat;
+    {% comment %} background-repeat : no-repeat; {% endcomment %}
     height : 100vh;
     margin : 0;
     padding : 0;
@@ -13,33 +17,22 @@
   }
 </style>
 {% endblock style %}
+{% block navbar %}
+{% if request.user.is_superuser %}
+<li class="px-2 nav-item">
+  <a class="nav-link" href="{% url 'addblog' %}">Add Blog</a>
+</li>
+{% endif %}
+{% endblock navbar %}
 {% block body %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}">Blog</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent px-5">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            {% if user.is_superuser %}
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'addblog' %}">Add Blog</a>
-          </li>
-          {% endif %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-          </li>              
-      </div>
-    </div>
-  </nav>
   
   
   <div class="background-image conatiner text-light">
     <center><strong><h1 class = "text-light py-3">View Blogs</h1></strong></center>
-    {% for i in posts %}
+    
     <div class="conatiner px-5 py-3">
       <div class="row mb-2">
+        {% for i in posts %}
         <div class="col-md-6">
           <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
             <div class="col p-4 d-flex flex-column position-static  bg-dark">
@@ -47,20 +40,27 @@
               <h3 class="mb-0">{{ i.title }}</h3>
               <div class="mb-1 text-muted">{{ i.date }}</div>
               <p class="card-text mb-auto">{{ i.text | truncatewords:20 |safe }}</p>
+              {% if request.user.is_superuser %}
+              <a href="{% url 'adminblog' i.pid %}" class="stretched-link">Continue reading</a>
+              {% else %}
               <a href="{% url 'blog' i.pid %}" class="stretched-link">Continue reading</a>
+              {% endif %}
             </div>
+
             <div class="col-auto d-none d-lg-block">
-              <img src="/media/{{ i.thumbnail }}" class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"></svg>
+              <img src="/media/{{ i.thumbnail }}" class="bd-placeholder-img" width="250" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"></svg>
     
             </div>
           </div>
-        </div>        
-      </div>
-    </div>
-      {% if forloop.counter|divisibleby:2 %}
+        </div> 
+        {% if forloop.counter|divisibleby:2 %}
       <div class="w-100"></div>
       {% endif %}
-    {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+      
+    
     
   </div>
   

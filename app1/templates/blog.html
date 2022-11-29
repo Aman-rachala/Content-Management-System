@@ -10,7 +10,7 @@
         border: 1px solid #ccc;
         margin : 0 0;
         padding : 10px 20px;
-        {% comment %} font-family : '' {% endcomment %}
+        
         border-radius: 10px;
         margin-left: 0%;
         margin-top : 80px;
@@ -31,7 +31,7 @@
         box-sizing : border-box;
         outline : none;
         font-size : 18px;
-        {% comment %} font-family :  {% endcomment %}
+        
         border : 1px solid #ddd;
         color : #777;
     }
@@ -70,18 +70,27 @@
         color: black;
         padding : 2px;
       }
-      {% comment %} .tip {
-        width: 0px;
-        height: 0px;
-        position: relative;
-        background: transparent;
-        border: 10px solid #ccc;
-      } {% endcomment %}
+      
+
+
 </style>
 {% endblock style %}
+{% block navbar %}
+{% if request.user.is_superuser %}
+<li class="px-2 nav-item">
+  <a class="nav-link" href="{% url 'addblog' %}">Add Blog</a>
+</li>
+<li class="px-2 nav-item">
+  <a class="nav-link" href="{% url 'editblog' i.pid %}">Edit Blog</a>
+</li>
+<li class="px-2 nav-item">
+  <a class="nav-link" href="{% url 'deleteblog' i.pid %}">Delete Blog</a>
+</li>
+{% endif %}
+{% endblock navbar %}
 {% block body %}
 {% load hitcount_tags %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
+{% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'index' %}">Blog</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,20 +111,21 @@
           </li>              
       </div>
     </div>
-  </nav>
-<div class="container">
-    <h1>{{i.title}}</h1>
-    <h2>{{ i.date }} | {% get_hit_count for i %} <i class="fa fa-eye"></i></h2>
+  </nav> {% endcomment %}
+
+<div class="container pt-4">
+    <strong><h1>{{i.title}}</h1></strong>
+    <h2>{{ i.date }} | <i class="fa-solid fa-pen"></i></h2>
     <p>{{ i.text|safe }}</p>        
 </div>
 
 <div class="container">
   <div class="select"> 
     <div class="d-flex flex-row">
-      <div class="p-2"><h5 class = "py-3">Click here to like</h5></div>
+      <div class="py-2"><h5 class = "py-3">Like Here</h5></div>
       <div class="p-2">
         <a href= {% url 'likes' i.pid %}>  
-          <img title= "Facebook like Button" src="https://pngimg.com/uploads/like/small/like_PNG15.png" height ="50" width ="50" align="center" />  
+          <img title= "Facebook like Button" src="https://pngimg.com/uploads/like/small/like_PNG15.png" height ="40" width ="40" align="center" />  
         </a> 
       </div>      
     </div>
@@ -154,7 +164,7 @@
         <div class="p-2">
             <div class="dialogbox">
                 <div class="body">
-                  <strong><h3>{{ comment.user }} | {{ comment.date }}</h3></strong>
+                  <strong><h4>{{ comment.user }} | {{ comment.date }}</h4></strong>
                   <span class="tip tip-down"></span>
                   <div class="message">
                     <span>{{ comment.text }}</span>

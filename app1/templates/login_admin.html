@@ -2,10 +2,18 @@
 {% block title %}Admin Login{% endblock title %}
 {% block style %}
 <style>   
-    Body {  
-      font-family: Calibri, Helvetica, sans-serif;  
-      background-color: black;  
-    }  
+  Body {  
+      
+    background : rgba(0,0,0,0.3)url("https://s3.envato.com/files/212542380/Dark%20Background%20%20%20%2001_preview1%20.JPG");
+  background-attachment : fixed;
+  background-position: center;
+  background-size : cover;
+  {% comment %} background-repeat : no-repeat; {% endcomment %}
+  height : 100vh;
+  margin : 0;
+  padding : 0;
+  background-blend-mode:darken; 
+  }  
     button {   
            background-color: black;   
            width: 100%;  
@@ -25,7 +33,7 @@
             margin: 8px 0;  
             padding: 12px 20px;   
             display: inline-block;   
-            border: 2px solid green;   
+            {% comment %} border: 2px solid green;    {% endcomment %}
             box-sizing: border-box;   
         }  
      button:hover {   
@@ -74,24 +82,14 @@
 .closebtn:hover {
   color: black;
 }
+h1{
+  padding-top: 10%;
+}
     </style> 
 {% endblock style %}
   
 {% block body %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 py-3">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'index' %}">Blog</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent px-5">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">          
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'userlogin' %}">Customer Login</a>
-          </li>              
-      </div>
-    </div>
-  </nav>
+
   {% for i in messages %}
     <div class="alert">
         <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
