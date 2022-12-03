@@ -110,10 +110,10 @@ class blog(HitCountDetailView,LoginRequiredMixin,View):
         # print(comments)
         # print(comments)
         counts = comments.count()
-        # likes = self.model1.likescount(post)
+        likes = post.likes.count()
         # print(likes)
         # print(counts)
-        return render(request,self.template,{"i":post,'comments':comments,'count':counts})
+        return render(request,self.template,{"i":post,'comments':comments,'count':counts,'likes':likes})
     
     def post(self,request,pid):
         post = self.model1.objects.filter(pid = pid)
@@ -126,7 +126,8 @@ class blog(HitCountDetailView,LoginRequiredMixin,View):
         comments = self.model2.objects.filter(post = post)
         # print(comments)
         counts = comments.count()
-        return render(request,self.template,{"i":post,'comments':comments,"count":counts})
+        # return render(request,self.template,{"i":post,'comments':comments,"count":counts})
+        return HttpResponseRedirect(reverse('blog',args = [str(pid)]))
          
 # def addblog(request):
 #     return render(request,"addblog.html")
@@ -143,7 +144,7 @@ class addblog(SuperUserCheck,CreateView):
         return render(request,self.template,{"form":form})
     
     def post(self,request):
-        form = PostForm(request.POST)
+        form = PostForm(request.POST,request.FILES)
         # print(form)
         if form.is_valid():
             # print("hi")
@@ -177,7 +178,7 @@ def editblog(request,pid):
     else:
         post = Post.objects.filter(pid = pid)
         post = post[0]
-        form = PostForm(request.POST,instance=post)
+        form = PostForm(request.POST,request.FILES,instance=post)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('blog',args = [str(pid)]))

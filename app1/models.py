@@ -11,7 +11,7 @@ class Post(models.Model):
     pid = models.AutoField(primary_key=True)
     title = models.CharField(max_length=50)
     text = RichTextField(max_length=100000)
-    thumbnail = models.ImageField(upload_to="media",blank = True,null=True)    
+    thumbnail = models.ImageField(upload_to="blog-post-thumbnail",blank = True,null=True)    
     likes = models.ManyToManyField(User,related_name='blog_post',blank=True)
     date = models.DateField(auto_now_add=True)
     

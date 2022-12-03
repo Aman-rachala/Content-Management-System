@@ -4,13 +4,13 @@
 {% block style %}
 
 <style>
-  .background-image{
+  Body{
     background : rgba(0,0,0,0.3)url("https://s3.envato.com/files/212542380/Dark%20Background%20%20%20%2001_preview1%20.JPG");
     background-attachment : fixed;
     background-position: center;
     background-size : cover;
     {% comment %} background-repeat : no-repeat; {% endcomment %}
-    height : 100vh;
+    height : 100%;
     margin : 0;
     padding : 0;
     background-blend-mode:darken;
@@ -48,7 +48,9 @@
             </div>
 
             <div class="col-auto d-none d-lg-block">
-              <img src="/media/{{ i.thumbnail }}" class="bd-placeholder-img" width="250" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"></svg>
+              {% if i.thumbnail %}
+              <img src="{{ i.thumbnail.url }}" class="bd-placeholder-img" width="250" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"></svg>              
+              {% endif %}
     
             </div>
           </div>

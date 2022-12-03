@@ -6,7 +6,7 @@
 {% block body %}
 <div class="container">
   <center><h1 class = "py-4">Edit BLOG</h1></center>
-    <form method = "POST">
+    <form method = "POST" enctype = "multipart/form-data">
       {% csrf_token %}
       {{ form.media }}
       {% comment %} {{ form.as_p }} {% endcomment %}

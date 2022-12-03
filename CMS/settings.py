@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from django.conf import settings
 from django.conf.urls.static import static
+import cloudinary_storage
 
 LOGIN_URL = "/"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'hitcount',
     'crispy_forms',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -158,3 +161,11 @@ CKEDITOR_CONFIGS = {
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME' : 'djrnwopzb',
+    'API_KEY' : '358248539457443',
+    'API_SECRET' : 'nBmwvRR-T6xzbn2pt5H-XRvp1dA'
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
